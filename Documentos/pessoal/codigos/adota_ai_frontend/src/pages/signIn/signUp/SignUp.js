@@ -2,8 +2,7 @@ import { useState } from "react";
 import styled from "styled-components";
 import logo from '../../../assets/images/adota-ai.png';
 import { Link, useNavigate } from "react-router-dom";
-import { signUp, BASE_URL } from "../../../services/adotaAi";
-import axios from "axios";
+import { signUp } from "../../../services/authApi";
 
 export default function SignUp() {
     const [email, setEmail] = useState("");
@@ -17,7 +16,7 @@ export default function SignUp() {
 
     function signUpUser(e) {
         e.preventDefault();
-        //setDisabled(true);
+        setDisabled(true);
         if (password !== confirmPassword) {
             alert("Senha e confirmar senha devem ser iguais!");
             return;
@@ -30,8 +29,8 @@ export default function SignUp() {
             confirmarSenha: confirmPassword,
             cpf: cpf
         }
-        console.log(body);
-        const promise = axios.post(`${BASE_URL}/signup`, body);
+        
+        const promise = signUp(body);
         promise
             .then(() => {
             alert("Cadastro feito com sucesso!");
@@ -41,7 +40,7 @@ export default function SignUp() {
                 console.log(err);
                 alert("Não foi possível Cadastrar");
             })
-        //setDisabled(false);
+        setDisabled(false);
     }
 
     return (

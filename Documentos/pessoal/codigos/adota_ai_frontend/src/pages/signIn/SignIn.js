@@ -1,28 +1,61 @@
 import styled from "styled-components";
 import logo from '../../assets/images/adota-ai.png';
-import { Link } from "react-router-dom";
-
-const formList = [
-    {name: "Email", type: "email"},
-    {name: "Senha", type: "password"},
-]
+import { Link, useNavigate } from "react-router-dom";
+import { signIn } from "../../services/authApi";
+import { useState } from "react";
 
 export default function SignIn() {
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [disabled, setDisabled] = useState(false);
+
+    const navigate = useNavigate();
+    
+    function signInUser(e) {
+        e.preventDefault();
+        setDisabled(true);
+        const promise = signIn({ email: email, senha: password });
+        promise
+            .then(data => {
+                localStorage.setItem('token', data.token);
+                localStorage.setItem('nome', data.nome);
+                navigate("/pets");
+            })
+            .catch(err => {
+                console.log(err);
+                alert("Erro ao fazer o login.")
+            })
+
+        setDisabled(false);
+    }
+
     return (
         <>
         <Container>
-         <img src={logo} className="App-logo" alt="logo" />
-         {formList.map(form => {
-            return (
+            <img src={logo} className="App-logo" alt="logo" />
+            <form onSubmit={signInUser}>
                 <div>
-                    <label>{form.name}</label>
-                    <InputForm type={form.type}/>
+                    <label>Email</label>
+                    <InputForm 
+                        type="email"
+                        value={email}
+                        onChange={e => setEmail(e.target.value)}
+                        disabled={disabled}
+                    />
                 </div> 
-            )
-         })}
-         <ButtonForm>
-           Entrar
-         </ButtonForm>
+                <div>
+                    <label>Senha</label>
+                    <InputForm 
+                        type="password"
+                        value={password}
+                        onChange={e => setPassword(e.target.value)}
+                        disabled={disabled}
+                    />
+                </div> 
+                <ButtonForm type="submit" disabled={disabled} onClick={e => signInUser(e)}>
+                    Entrar
+                </ButtonForm>
+            </form>
          <Link to="/signup">
             <MessageRedirect>Não possui cadastro? Cadastre-se</MessageRedirect>
          </Link>
@@ -41,6 +74,13 @@ const Container = styled.div`
     justify-content: center;
     font-size: calc(10px + 2vmin);
     color: white;
+
+    form {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
 `;
 
 const InputForm = styled.input`
@@ -58,8 +98,10 @@ const ButtonForm = styled.button`
     width: 200px;
     height: 35px;
     border-radius: 15px;
+    border: 1px solid black;
     background-color: #FFF;
     color: gray;
+    font-size: 14px;
     display: flex;
     justify-content: center;
     align-items: center;
