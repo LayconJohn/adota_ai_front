@@ -1,17 +1,18 @@
 
 
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import logo from "../assets/images/adota-ai.png";
 
 export default function Header() {
+  const navigate = useNavigate();
   
   return (
     <Container>
-      <p>chat</p>
-      <img src={logo} alt="logo"/>
-      <div>Add</div>
+      <p onClick={() => navigate("/chat")}>chat</p>
+      <img src={logo} alt="logo" onClick={() => navigate("/")} />
+      <div onClick={() => navigate("/pets/new")} >Add</div>
     </Container>
   );
 }

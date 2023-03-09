@@ -1,7 +1,7 @@
 import styled from "styled-components";
-import logo from '../../assets/images/adota-ai.png';
+import logo from '../../../assets/images/adota-ai.png';
 import { Link, useNavigate } from "react-router-dom";
-import { signIn } from "../../services/authApi";
+import { signIn } from "../../../services/authApi";
 import { useState } from "react";
 
 export default function SignIn() {
@@ -17,8 +17,7 @@ export default function SignIn() {
         const promise = signIn({ email: email, senha: password });
         promise
             .then(data => {
-                localStorage.setItem('token', data.token);
-                localStorage.setItem('nome', data.nome);
+                localStorage.setItem('token', data.data);
                 navigate("/pets");
             })
             .catch(err => {
