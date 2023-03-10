@@ -1,4 +1,4 @@
-
+import { IoMdAddCircleOutline, IoIosChatbubbles } from "react-icons/io";
 
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -10,9 +10,13 @@ export default function Header() {
   
   return (
     <Container>
-      <p onClick={() => navigate("/chat")}>chat</p>
-      <img src={logo} alt="logo" onClick={() => navigate("/")} />
-      <div onClick={() => navigate("/pets/new")} >Add</div>
+      <Icon onClick={() => navigate("/chat")}>
+        <IoIosChatbubbles  />
+      </Icon>
+      <img src={logo} alt="logo" onClick={() => navigate("/pets")} />
+      <Icon onClick={() => navigate("/pets/new")} >
+        <IoMdAddCircleOutline />
+      </Icon>
     </Container>
   );
 }
@@ -25,11 +29,35 @@ const Container = styled.div`
   display: flex;
   justify-content: space-around;
   align-items: center;
+  position: fixed;
+  top: 0px;
+  right: 0px;
+  z-index: 1;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.07);
+  padding: 10px;
 
   img {
     width: 80px;
     height: 80px;
   }
+`;
+
+const Icon = styled.div`
+    width: 80px;
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 40px;
+    scale: 0.95;
+
+    &:hover {
+      scale: 1;
+    }
+
+    &:active {
+      transform: translateY(1px);
+    }
 `;
 
 const Menu = styled.div`
