@@ -16,7 +16,7 @@ export default function Pets() {
             if (!token) {
                 navigate("/");
             } 
-            return await getPets(token);
+            return await getPets(token, 1);
         }
         const promise = fetchData(token);
         promise

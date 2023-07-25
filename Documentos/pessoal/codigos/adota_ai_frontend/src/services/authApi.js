@@ -6,8 +6,13 @@ async function signUp(body) {
 }
 
 async function signIn(body) {
-    const promise = await api.post('/login', body);
-    return promise;
+    try {
+        const promise = await api.post('/login', body);
+        return promise;
+    } catch (error) {
+        console.log(error);
+        return error.message;
+    }
 }
 
 export { signUp, signIn };
