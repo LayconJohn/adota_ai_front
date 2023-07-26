@@ -18,6 +18,7 @@ export default function SignIn() {
         promise
             .then(data => {
                 localStorage.setItem('token', data.data);
+                console.log(data);
                 navigate("/pets");
             })
             .catch(err => {

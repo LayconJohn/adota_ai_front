@@ -10,4 +10,14 @@ async function getPets(token, page) {
     return promise;
 }
 
-export { getPets };
+async function getPet(token, id) {
+    const config = {
+        headers: {
+            "Authorization": `Bearer ${token}`
+        }
+    }
+    const promise = await api.get(`/pet/${id}`, config);
+    return promise;
+}
+
+export { getPets, getPet };

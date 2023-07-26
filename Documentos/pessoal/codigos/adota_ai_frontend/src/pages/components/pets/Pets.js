@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import Header from "../../../components/Header";
-import { getPets } from "../../../services/petsApi";
+import { getPets, getPet } from "../../../services/petsApi";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import fundo from "../../../assets/images/fundo_adota_ai.png";
@@ -9,31 +9,56 @@ import { MdOutlinePets } from 'react-icons/md';
 export default function Pets() {
     const [pets, setPets] = useState([]);
     const navigate = useNavigate();
-    const token = localStorage.getItem('token');
+    const [petIsSelected, setPetIsSelected] = useState(false);
+    const [pet, setPet] = useState(undefined);
 
     useEffect(() => {
-        async function fetchData(token) {
-            //console.log(token);
+        if(!localStorage.getItem("token")) {
+            navigate("/");
+        }
+    }, []);
+
+    useEffect(() => {
+        async function fetchData() {
+            const token = localStorage.getItem('token');
+            console.log(token);
             if (!token) {
                 navigate("/");
             } 
             return await getPets(token, 1);
         }
-        const promise = fetchData(token);
+        const promise = fetchData();
         promise
             .then(res => {
-                console.log(res.data)
                 setPets(res.data);
             })
             .catch(err => console.log(err));
     }, []);
+
+    async function selectPet(id) {
+        const token = localStorage.getItem('token');
+        console.log(token);
+        setPetIsSelected(true);
+        try {
+            const pet = await getPet(token, id);
+            console.log(pet);
+            setPet(pet);
+        } catch (error) {
+            alert("Erro ao selecionar o pet");
+            console.log(error);            
+        }
+    }
 
     return (
         <>
             <Header />
             <Container>
                 {pets.map( (pet, i) => {
-                    return <PetCard key={i} >
+                    return <PetCard 
+                    key={i} 
+                    petSelected={petIsSelected}
+                    onClick={() => selectPet(pet.id)}
+                    >
                         <div className="pet-container">
                             <img src={pet.imagem} alt={pet.nome}/>
                             <div className="pet-info">
@@ -41,7 +66,7 @@ export default function Pets() {
                                     {pet.nome}
                                 </span>
                                 <div className="pet-race">
-                                    <div clssName="pet-icon">
+                                    <div className="pet-icon">
                                         <MdOutlinePets />
                                     </div>
                                     <span>{pet.raca}</span>
@@ -54,6 +79,30 @@ export default function Pets() {
                     </PetCard>
                 })}
             </Container>
+            <PetContainer 
+            onClick={() => setPetIsSelected(false)}
+            petSelected={petIsSelected}
+            >
+                <div className="pet-details">
+                    <div className="pet-container">
+                        <img src={"olá"} alt={"olá"}/>
+                        <div className="pet-info">
+                            <span className="pet-name">
+                                {"olá"}
+                            </span>
+                            <div className="pet-race">
+                                <div clssName="pet-icon">
+                                    <MdOutlinePets />
+                                </div>
+                                <span>{"olá"}</span>
+                            </div>
+                        </div>
+                        <div className="pet-age">
+                            {"olá"}
+                        </div>
+                </div>
+                </div>
+            </PetContainer>
         
         </>
     )
@@ -93,6 +142,7 @@ const PetCard = styled.div`
     animation-iteration-count: infinite;
     animation-direction:alternate;
     animation-name: transformAnimation;
+    display: ${props => props.petSelected ? "none" : ""};
     @keyframes transformAnimation {
         to { transform: scale(1.07); }
     } 
@@ -111,7 +161,7 @@ const PetCard = styled.div`
         width: 100%;
         height: 100%;
         position: absolute;
-        top: 0;
+        top: 0;  
     }
 
     img {
@@ -163,3 +213,87 @@ const PetCard = styled.div`
     }
 
 `;    
+
+const PetContainer = styled.div`
+    height: 100vh;
+    width: 100vw;
+    background-color: gray;
+    opacity: 0.4;
+    position: fixed;
+    top: 0;
+    display: ${props => props.petSelected ? "flex" : "none"};
+    justify-content: center;
+    align-items: center;
+
+    .pet-details{
+        width: 310px;
+        height: 330px;
+        background-color: #C6AADA;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        border-radius: 15px;
+        border: 1px solid steelblue;
+        box-shadow: 5px 10px lavender;
+
+        .pet-container{
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;  
+
+        img {
+        width: 100%;
+        height: 70%;
+        border-radius: 10px;
+        }
+
+        .pet-info{
+        display: flex;
+        width: 70%;
+        justify-content: space-between;
+        padding: 1rem;
+    
+            .pet-name{
+                color: #643562;
+                font-weight: bold;
+                font size: 16px;
+            }
+
+            .pet-race{
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                gap: 0.3rem;
+                font-stretch: expanded;
+                
+                .pet-icon{
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    height: 2rem;
+                    animation-duration: 3s;
+                    animation-iteration-count: infinite;
+                    animation-direction:alternate;
+                    animation-name: transformAnimation;
+
+                }
+            }
+    }
+
+    .pet-age{
+        width: 70%;
+        display: flex;
+        padding: 0 1rem;
+        justify-content: flex-start;
+        font-stretch: condensed;
+    }
+    
+    }
+
+    
+        
+    
+        }
+`;

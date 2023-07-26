@@ -10,7 +10,6 @@ async function signIn(body) {
         const promise = await api.post('/login', body);
         return promise;
     } catch (error) {
-        console.log(error);
         return error.message;
     }
 }
