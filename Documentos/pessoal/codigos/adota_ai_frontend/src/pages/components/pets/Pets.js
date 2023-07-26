@@ -34,9 +34,20 @@ export default function Pets() {
                 {pets.map( (pet, i) => {
                     return <PetCard key={i} >
                         <img src={pet.imagem}/>
-                        <div>
-                            {pet.nome}
+                        <div className="pet-info">
+                            <span className="pet-name">
+                                {pet.nome}
+                            </span>
+                            <span className="pet-race">
+                                {pet.raca}
+                            </span>
                         </div>
+                        <div className="pet-age">
+                            {pet.nascimento}
+                        </div>
+
+
+
                     </PetCard>
                 })}
             </Container>
@@ -47,18 +58,20 @@ export default function Pets() {
 
 const Container = styled.div`
     height: 100vh;
-    width: 100vw;
+    width: 100%;
+    overflow: hidden;
     margin-top: 100px;
     display: flex;
     justify-content: center;
-    //align-items: center;
+    padding: 1rem 1rem;
+    gap: 3rem;
     flex-wrap: wrap;
     background-image: url(${fundo});
 `;
 
 const PetCard = styled.div`
-    width: 210px;
-    height: 240px;
+    width: 310px;
+    height: 300px;
     background-color: #C6AADA;
     display: flex;
     align-items: center;
@@ -78,15 +91,27 @@ const PetCard = styled.div`
     }
 
     img {
-        width: 190px;
-        height: 170px;
+        width: 70%;
+        height: 60%;
         border-radius: 10px;
         margin-bottom: 5px;
     }
 
-    div {
+    .pet-info{
         display: flex;
+        width: 70%;
         justify-content: space-between;
-        align-items: center;
+    
+        .pet-name{
+            font-weight: bold;
+            font size: 16px;
+
+        }
+    }
+
+    .pet-age{
+        display: flex;
+        width: 70%;
+        justify-content: flex-start;
     }
 `;    
