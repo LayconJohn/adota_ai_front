@@ -19,13 +19,13 @@ export default function Pets() {
     }, []);
 
     useEffect(() => {
-        async function fetchData() {
+        function fetchData() {
             const token = localStorage.getItem('token');
             console.log(token);
             if (!token) {
                 navigate("/");
             } 
-            return await getPets(token, 1);
+            return getPets(token, 1);
         }
         const promise = fetchData();
         promise

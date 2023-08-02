@@ -17,8 +17,8 @@ export default function SignIn() {
         const promise = signIn({ email: email, senha: password });
         promise
             .then(data => {
-                localStorage.setItem('token', data.data);
-                console.log(data);
+                localStorage.setItem('token', data.data.acess_token);
+                console.log(data.data.acess_token);
                 navigate("/pets");
             })
             .catch(err => {
