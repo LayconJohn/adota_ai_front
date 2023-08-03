@@ -10,7 +10,14 @@ export default function Pets() {
     const [pets, setPets] = useState([]);
     const navigate = useNavigate();
     const [petIsSelected, setPetIsSelected] = useState(false);
-    const [pet, setPet] = useState(undefined);
+    const [pet, setPet] = useState({
+        nome: "Seu Lindo Pet",
+        raca: "Raça do seu pet",
+        imagem: "https://www.shutterstock.com/image-photo/row-tops-heads-cats-dogs-600w-1034939470.jpg",
+        nascimento: "10/02/2022",
+        contato: "(00) 90000-0000"
+
+    });
 
     useEffect(() => {
         if(!localStorage.getItem("token")) {
@@ -33,7 +40,7 @@ export default function Pets() {
                 setPets(res.data);
             })
             .catch(err => console.log(err));
-    }, []);
+    }, [pet]);
 
     async function selectPet(id) {
         const token = localStorage.getItem('token');
@@ -42,7 +49,8 @@ export default function Pets() {
         try {
             const { data } = await getPet(token, id);
             console.log(data);
-            setPet(pet);
+            setPet({...data});
+            console.log("pet", pet);
         } catch (error) {
             alert("Erro ao selecionar o pet");
             console.log(error);            
@@ -84,23 +92,50 @@ export default function Pets() {
             petSelected={petIsSelected}
             >
                 <div className="pet-details">
-                    <div className="pet-container">
-                        <img src={pet?.imagem} alt={pet?.nome}/>
-                        <div className="pet-info">
-                            <span className="pet-name">
-                                {pet?.nome}
-                            </span>
-                            <div className="pet-race">
-                                <div clssName="pet-icon">
-                                    <MdOutlinePets />
-                                </div>
-                                <span>{pet?.raca}</span>
+                    <div className="pet-image">
+                        <img src={pet?.imagem} alt="Imagem do Pet"/>
+                    </div>
+                    <div className="pet-info">
+                        <span className="pet-name">
+                            {pet.nome}
+                        </span>
+                        <div className="pet-race">
+                            <div className="pet-icon">
+                                <MdOutlinePets />
                             </div>
+                            <span>{pet.raca}</span>
                         </div>
+                    </div>
+                    <div className="pet-info">
+                        <span className="pet-name">
+                            Descrição
+                        </span>
+                        <div className="pet-race">
+                            <span>{pet.descricao}</span>
+                        </div>
+                    </div>
+                    <div className="pet-info">
+                        <span className="pet-name">
+                            Contato
+                        </span>
+                        <div className="pet-race">
+                            <span>{pet.contato}</span>
+                        </div>
+                    </div>
+                    <div className="pet-info">
+                        <span className="pet-name">
+                            Idade
+                        </span>
                         <div className="pet-age">
-                            {pet?.nascimento}
+                            <span>{pet.nascimento}</span>
                         </div>
-                </div>
+                    </div>
+                    <ButtonContact>
+                        Entrar em contato
+                    </ButtonContact>
+
+                    
+
                 </div>
             </PetContainer>
         
@@ -217,17 +252,17 @@ const PetCard = styled.div`
 const PetContainer = styled.div`
     height: 100vh;
     width: 100vw;
-    background-color: gray;
-    opacity: 0.4;
+    background-color: rgba(80, 80, 80, 0.3);
+    opacity: 0.9;
     position: fixed;
     top: 0;
-    display: ${props => props.petSelected ? "flex" : "none"};
+    display: ${props => props.petSelected ? "flex" : "none  "};
     justify-content: center;
     align-items: center;
 
     .pet-details{
-        width: 310px;
-        height: 330px;
+        width: 400px;
+        height: 500px;
         background-color: #C6AADA;
         display: flex;
         align-items: center;
@@ -237,25 +272,44 @@ const PetContainer = styled.div`
         border: 1px solid lavender;
         box-shadow: 5px 10px lavender;
         position: relative;
+        padding-top: 150px;
+
+        .pet-image{
+            width: 100%;
+            height: 290px;
+            border-radius: 10px;
+            position: absolute;
+            top: 0;
+            border: 1px solid rgba(0, 0 , 0,  0.5);
+            box-shadow: 1px 2px rgba(0, 0 , 0,  0.5);
+
+            img {
+                width: 100%;
+                height: 100%;
+                z-index: 3;
+                border-radius: 15px;
+                object-fit: fill;
+            }
         }
-        .pet-container{
-        width: 100%;
-        height: 100%;
-        position: absolute;
-        top: 0;  
+
+        .pet-age{
+        height: 20px;
+        width: 70%;
+        display: flex;
+        padding: 0 1rem;
+        justify-content: flex-end;
+        font-stretch: condensed;
     }
 
-    img {
-        width: 100%;
-        height: 70%;
-        border-radius: 10px;
     }
 
     .pet-info{
         display: flex;
         width: 70%;
         justify-content: space-between;
-        padding: 1rem;
+        align-items: center;
+        padding: 1rem 1rem 0r 1rem;
+        margin-top: 1rem;
     
         .pet-name{
             color: #643562;
@@ -276,20 +330,23 @@ const PetContainer = styled.div`
                 justify-content: center;
                 align-items: center;
                 height: 2rem;
-                animation-duration: 3s;
-                animation-iteration-count: infinite;
-                animation-direction:alternate;
-                animation-name: transformAnimation;
-
             }
         }
     }
-
-    .pet-age{
-        width: 70%;
-        display: flex;
-        padding: 0 1rem;
-        justify-content: flex-start;
-        font-stretch: condensed;
-    }
 `;
+
+const ButtonContact = styled.div`
+    display: flex;
+    width: 70%;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    margin-top: 1rem;
+    background-color: green;
+    border-radius: 0.5rem;
+
+    &:hover{
+        scale: 1.1;
+        cursor: pointer;
+    }
+`; 
