@@ -37,11 +37,11 @@ export default function Pets() {
 
     async function selectPet(id) {
         const token = localStorage.getItem('token');
-        console.log(token);
+        //console.log(token);
         setPetIsSelected(true);
         try {
-            const pet = await getPet(token, id);
-            console.log(pet);
+            const { data } = await getPet(token, id);
+            console.log(data);
             setPet(pet);
         } catch (error) {
             alert("Erro ao selecionar o pet");
@@ -85,20 +85,20 @@ export default function Pets() {
             >
                 <div className="pet-details">
                     <div className="pet-container">
-                        <img src={"olá"} alt={"olá"}/>
+                        <img src={pet?.imagem} alt={pet?.nome}/>
                         <div className="pet-info">
                             <span className="pet-name">
-                                {"olá"}
+                                {pet?.nome}
                             </span>
                             <div className="pet-race">
                                 <div clssName="pet-icon">
                                     <MdOutlinePets />
                                 </div>
-                                <span>{"olá"}</span>
+                                <span>{pet?.raca}</span>
                             </div>
                         </div>
                         <div className="pet-age">
-                            {"olá"}
+                            {pet?.nascimento}
                         </div>
                 </div>
                 </div>
@@ -234,52 +234,55 @@ const PetContainer = styled.div`
         justify-content: center;
         flex-direction: column;
         border-radius: 15px;
-        border: 1px solid steelblue;
+        border: 1px solid lavender;
         box-shadow: 5px 10px lavender;
-
+        position: relative;
+        }
         .pet-container{
         width: 100%;
         height: 100%;
         position: absolute;
         top: 0;  
+    }
 
-        img {
+    img {
         width: 100%;
         height: 70%;
         border-radius: 10px;
-        }
+    }
 
-        .pet-info{
+    .pet-info{
         display: flex;
         width: 70%;
         justify-content: space-between;
         padding: 1rem;
     
-            .pet-name{
-                color: #643562;
-                font-weight: bold;
-                font size: 16px;
-            }
+        .pet-name{
+            color: #643562;
+            font-weight: bold;
+            font size: 16px;
 
-            .pet-race{
+        }
+
+        .pet-race{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.3rem;
+            font-stretch: expanded;
+            
+            .pet-icon{
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                gap: 0.3rem;
-                font-stretch: expanded;
-                
-                .pet-icon{
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    height: 2rem;
-                    animation-duration: 3s;
-                    animation-iteration-count: infinite;
-                    animation-direction:alternate;
-                    animation-name: transformAnimation;
+                height: 2rem;
+                animation-duration: 3s;
+                animation-iteration-count: infinite;
+                animation-direction:alternate;
+                animation-name: transformAnimation;
 
-                }
             }
+        }
     }
 
     .pet-age{
@@ -289,11 +292,4 @@ const PetContainer = styled.div`
         justify-content: flex-start;
         font-stretch: condensed;
     }
-    
-    }
-
-    
-        
-    
-        }
 `;

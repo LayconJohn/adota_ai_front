@@ -18,7 +18,7 @@ export default function SignIn() {
         promise
             .then(data => {
                 localStorage.setItem('token', data.data.acess_token);
-                console.log(data.data.acess_token);
+                //console.log(data.data.acess_token);
                 navigate("/pets");
             })
             .catch(err => {
