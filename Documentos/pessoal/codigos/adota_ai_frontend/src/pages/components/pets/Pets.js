@@ -42,6 +42,7 @@ export default function Pets() {
             .catch(err => console.log(err));
     }, [pet]);
 
+
     async function selectPet(id) {
         const token = localStorage.getItem('token');
         //console.log(token);
@@ -55,6 +56,23 @@ export default function Pets() {
             alert("Erro ao selecionar o pet");
             console.log(error);            
         }
+    }
+
+    function callContact(pet) {
+        const message = `
+            Olá, gostaria de conversar sobre a adoção do(a) ${pet.nome}.
+        `;
+        const encoded = encodeURIComponent( message );
+        const contact =  modifyContact(pet.contato)
+        const linkPedido = `https://wa.me/${contact}?text=${encoded}`;
+        //console.log(pet.contato);
+        //console.log(modifyContact(pet.contato));
+        window.open(linkPedido, "_blank")
+    }
+
+    function modifyContact(phoneNumber) {
+        return phoneNumber.replace("(", "")
+            .replace(")", "").replace("-", "")
     }
 
     return (
@@ -130,7 +148,8 @@ export default function Pets() {
                             <span>{pet.nascimento}</span>
                         </div>
                     </div>
-                    <ButtonContact>
+                    <ButtonContact
+                    onClick={() => callContact(pet)}>
                         Entrar em contato
                     </ButtonContact>
 
