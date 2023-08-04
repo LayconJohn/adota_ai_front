@@ -21,12 +21,36 @@ export default function CreatePet() {
     setValuesForm({...valuesForm, [e.target.name]: e.target.value});
   }
 
+  function handleSubmit(e) {
+    e.preventDefault();
+    formValidation(valuesForm);
+  }
+
+  function formValidation(pet) {
+    const regexContact = /(?:\()[0-9]{2}(?:\))\s?[0-9]{4,5}(?:-)[0-9]{4}$/
+    const regexBirth = /(\d{2})[-.\/](\d{2})[-.\/](\d{4})/ 
+    const regexImage = /(((https?|ftp):\/\/)?([\w\-\.])+(\.)([\w]){2,4}([\w\/+=%&_\.~?\-]*))*$/
+    if (!regexContact.test(pet.contato)) {
+      alert("Preencha o nascimento no formato (00)90000-0000");
+      return false;
+    } 
+    if (!regexBirth.test(pet.nascimento)) {
+      alert("Preencha o nascimento no formato 15/12/2023");
+      return false;
+    } 
+    if (!regexImage.test(pet.imagem)) {
+      alert("Preencha a imagem com um link válido");
+      return false;
+    } 
+    return true;
+  }
+
 
     return (
       <>
         <Header />
         <ContainerForm>
-          <form>
+          <form onSubmit={handleSubmit}>
             <div className="pet-image"> 
               <img src={logo} alt="Logo" />
             </div>
@@ -35,36 +59,42 @@ export default function CreatePet() {
               placeholder="Nome"
               name="nome"
               onChange={e => handleChange(e)}
+              required
             />
             <input 
               type="text"
               placeholder="Raça"
               name="race"
               onChange={e => handleChange(e)}
+              required
             />
             <input 
               type="text"
               placeholder="Descrição"
               name="descricao"
               onChange={e => handleChange(e)}
+              required
             />            
             <input 
               type="text"
               placeholder="Imagem"
               name="imagem"
               onChange={e => handleChange(e)}
+              required
             />
             <input 
               type="text"
               placeholder="Contato"
               name="contato"
               onChange={e => handleChange(e)}
+              required
             />
             <input 
               type="text"
               placeholder="Nascimento"
               name="nascimento"
               onChange={e => handleChange(e)}
+              required
             /> 
             <button type="submit">Cadastrar Pet</button>
             <span><Link to="/pets"> Voltar </Link> </span>                                   
