@@ -16,8 +16,8 @@ function App() {
         <Route path="/" element={ <SignIn /> } />
         <Route path="/signup" element={ <SignUp /> } />
         <Route path="/pets" element={ <Pets /> }/>
-        <Route to="/pets/new" element={ <CreatePet /> } />
-        <Route to="/chat" element={ <Chat /> }/>
+        <Route path="/pets/new" element={ <CreatePet /> } />
+        <Route path="/chat" element={ <Chat /> }/>
       </Routes>
       </BrowserRouter>
     </div>
