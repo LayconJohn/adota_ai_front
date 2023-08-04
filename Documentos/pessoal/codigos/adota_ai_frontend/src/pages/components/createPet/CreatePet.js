@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 
 export default function CreatePet() {
 
+  const [disabled, setDisabled] = useState(false);
   const [valuesForm, setValuesForm] = useState({
     nome: "",
     raca: "",
@@ -23,7 +24,11 @@ export default function CreatePet() {
 
   function handleSubmit(e) {
     e.preventDefault();
-    formValidation(valuesForm);
+    setDisabled(true);
+    if (!formValidation(valuesForm)) {
+      alert("Preencha os campos corretamente");
+    }
+    setDisabled(false);
   }
 
   function formValidation(pet) {
@@ -59,6 +64,7 @@ export default function CreatePet() {
               placeholder="Nome"
               name="nome"
               onChange={e => handleChange(e)}
+              disabled={disabled}
               required
             />
             <input 
@@ -66,6 +72,7 @@ export default function CreatePet() {
               placeholder="Raça"
               name="race"
               onChange={e => handleChange(e)}
+              disabled={disabled}
               required
             />
             <input 
@@ -73,6 +80,7 @@ export default function CreatePet() {
               placeholder="Descrição"
               name="descricao"
               onChange={e => handleChange(e)}
+              disabled={disabled}
               required
             />            
             <input 
@@ -80,6 +88,7 @@ export default function CreatePet() {
               placeholder="Imagem"
               name="imagem"
               onChange={e => handleChange(e)}
+              disabled={disabled}
               required
             />
             <input 
@@ -87,6 +96,7 @@ export default function CreatePet() {
               placeholder="Contato"
               name="contato"
               onChange={e => handleChange(e)}
+              disabled={disabled}
               required
             />
             <input 
@@ -94,9 +104,13 @@ export default function CreatePet() {
               placeholder="Nascimento"
               name="nascimento"
               onChange={e => handleChange(e)}
+              disabled={disabled}
               required
             /> 
-            <button type="submit">Cadastrar Pet</button>
+            <button 
+              type="submit"
+              disabled={disabled}
+            >Cadastrar Pet</button>
             <span><Link to="/pets"> Voltar </Link> </span>                                   
           </form>
         </ContainerForm>
