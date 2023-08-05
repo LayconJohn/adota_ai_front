@@ -8,7 +8,7 @@ async function getPets(token, page) {
     }
     const promise = await api.get(`/pet?page=${page}`, config);
     return promise;
-}
+} 
 
 async function getPet(token, id) {
     const config = {
@@ -20,4 +20,14 @@ async function getPet(token, id) {
     return promise;
 }
 
-export { getPets, getPet };
+function postPet(token, pet) {
+    const config = {
+        headers: {
+            "Authorization": `Bearer ${token}`
+        }
+    }
+    const promise = api.post(`/pet`, pet, config);
+    return promise;
+}
+
+export { getPets, getPet, postPet };

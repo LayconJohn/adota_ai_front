@@ -3,10 +3,13 @@ import fundo from "../../../assets/images/fundo_adota_ai.png";
 import styled from "styled-components";
 import logo from "../../../assets/images/adota-ai.png";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { postPet } from "../../../services/petsApi";
 
 
 export default function CreatePet() {
+
+  const navigate = useNavigate();
 
   const [disabled, setDisabled] = useState(false);
   const [valuesForm, setValuesForm] = useState({
@@ -22,11 +25,23 @@ export default function CreatePet() {
     setValuesForm({...valuesForm, [e.target.name]: e.target.value});
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
     setDisabled(true);
     if (!formValidation(valuesForm)) {
       alert("Preencha os campos corretamente");
+      setDisabled(false);
+      return;
+    }
+    const token = localStorage.getItem('token');
+    try {
+      const { data } =  await postPet(token, valuesForm);
+      console.log(data);
+      alert("Pet criado com sucesso!");
+      navigate("/pets");
+    } catch (error) {
+      console.log(error.message);
+      alert("Erro ao cadastrar seu Pet")
     }
     setDisabled(false);
   }
@@ -50,6 +65,11 @@ export default function CreatePet() {
     return true;
   }
 
+  useEffect(() => {
+    if(!localStorage.getItem("token")) {
+        navigate("/signup");
+    }
+  }, []);
 
     return (
       <>
@@ -70,7 +90,7 @@ export default function CreatePet() {
             <input 
               type="text"
               placeholder="Raça"
-              name="race"
+              name="raca"
               onChange={e => handleChange(e)}
               disabled={disabled}
               required

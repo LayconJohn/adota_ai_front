@@ -2,7 +2,7 @@ import styled from "styled-components";
 import logo from '../../../assets/images/adota-ai.png';
 import { Link, useNavigate } from "react-router-dom";
 import { signIn } from "../../../services/authApi";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function SignIn() {
     const [email, setEmail] = useState("");
@@ -28,6 +28,12 @@ export default function SignIn() {
 
         setDisabled(false);
     }
+
+    useEffect(() => {
+        if(localStorage.getItem("token")) {
+            navigate("/");
+        }
+      }, []);
 
     return (
         <>
